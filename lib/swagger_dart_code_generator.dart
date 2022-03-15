@@ -58,8 +58,9 @@ Map<String, List<String>> _generateExtensions(GeneratorOptions options) {
   additionalResultPath =
       _getAdditionalResultPath(options).replaceAll('\\', '/');
 
-  File(additionalResultPath).createSync();
-
+  if (!File(additionalResultPath).existsSync()) {
+    File(additionalResultPath).createSync();
+  }
   var out = normalize(options.outputFolder);
 
   final allFilesPaths = [
