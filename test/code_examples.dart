@@ -3,6 +3,25 @@ const String modelWithParametersV3 = '''
 {
  "components": {
     "schemas": {
+      "ModelWithDictionary": {
+        "properties": {
+          "settings": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SettingValue"
+            },
+            "type": "object"
+          },
+          "more_settings": {
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SettingValue"
+              }
+            },
+            "type": "object"
+          }
+        }
+      },
       "SomeEnumModel" : {
         "enum" : ["one", "two"]
       },

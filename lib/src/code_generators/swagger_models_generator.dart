@@ -724,6 +724,84 @@ abstract class SwaggerModelsGenerator {
     return typeName;
   }
 
+  String _generateDictionaryPropertyTypeName({
+    required List<String> allEnumNames,
+    required List<String> allEnumListNames,
+    required Map<String, dynamic> propertyEntryMap,
+    required GeneratorOptions options,
+    required Map<String, String> basicTypesMap,
+    required String propertyName,
+    required String className,
+  }) {
+    final items = propertyEntryMap['additionalProperties'];
+
+    var typeName = '';
+    if (items != null) {
+      typeName = getValidatedClassName(items['originalRef'] as String? ?? '');
+
+      if (typeName.isNotEmpty &&
+          !kBasicTypes.contains(typeName.toLowerCase())) {
+        typeName += options.modelPostfix;
+      }
+
+      if (typeName.isEmpty) {
+        final ref = items['\$ref'] as String?;
+        if (ref?.isNotEmpty == true) {
+          typeName = ref!.split('/').last;
+
+          if (!allEnumListNames.contains(typeName) &&
+              !allEnumNames.contains('enums.' + typeName) &&
+              !basicTypesMap.containsKey(typeName)) {
+            typeName += options.modelPostfix;
+          }
+        }
+
+        if (basicTypesMap.containsKey(typeName)) {
+          typeName = basicTypesMap[typeName]!;
+        } else if (typeName.isNotEmpty && typeName != kDynamic) {
+          typeName = typeName.pascalCase;
+        }
+      } else if (!allEnumNames.contains('enums.$typeName') &&
+          !kBasicTypes.contains(typeName.toLowerCase())) {
+        typeName = kBasicTypesMap[typeName] ?? typeName + options.modelPostfix;
+      }
+
+      if (typeName.isNotEmpty) {
+        typeName = SwaggerModelsGenerator.getValidatedClassName(typeName);
+      }
+
+      if (typeName.isEmpty) {
+        if (items['type'] == 'array' || items['items'] != null) {
+          return _generateListPropertyTypeName(
+            allEnumListNames: allEnumListNames,
+            allEnumNames: allEnumNames,
+            basicTypesMap: basicTypesMap,
+            className: className,
+            options: options,
+            propertyEntryMap: items as Map<String, dynamic>,
+            propertyName: propertyName,
+          ).asList();
+        }
+      }
+
+      if (allEnumNames.contains('enums.$typeName')) {
+        typeName = 'enums.$typeName';
+      }
+    }
+
+    if (typeName.isEmpty) {
+      typeName = getParameterTypeName(
+        className,
+        propertyName,
+        items as Map<String, dynamic>? ?? {},
+        options.modelPostfix,
+        null,
+      );
+    }
+
+    return typeName;
+  }
+
   String generateListPropertyContent(
       String propertyName,
       String propertyKey,
@@ -759,6 +837,43 @@ abstract class SwaggerModelsGenerator {
     }
 
     return '$jsonKeyContent  final List<$typeName>? ${SwaggerModelsGenerator.generateFieldName(propertyName)};';
+  }
+
+  String generateDictionaryPropertyContent(
+      String propertyName,
+      String propertyKey,
+      String className,
+      Map<String, dynamic> propertyEntryMap,
+      bool useDefaultNullForLists,
+      List<String> allEnumNames,
+      List<String> allEnumListNames,
+      GeneratorOptions options,
+      Map<String, String> basicTypesMap) {
+    final typeName = _generateDictionaryPropertyTypeName(
+      allEnumListNames: allEnumListNames,
+      allEnumNames: allEnumNames,
+      basicTypesMap: basicTypesMap,
+      className: className,
+      options: options,
+      propertyEntryMap: propertyEntryMap,
+      propertyName: propertyName,
+    );
+
+    final unknownEnumValue = generateUnknownEnumValue(
+        allEnumNames, allEnumListNames, typeName, true);
+
+    final includeIfNullString = generateIncludeIfNullString(options);
+
+    String jsonKeyContent;
+    if (unknownEnumValue.isEmpty) {
+      jsonKeyContent =
+          "@JsonKey(name: '$propertyKey'$includeIfNullString${useDefaultNullForLists ? '' : ', defaultValue: new Map<String,$typeName>()'})\n";
+    } else {
+      jsonKeyContent =
+          "@JsonKey(name: '$propertyKey'$includeIfNullString$unknownEnumValue)\n";
+    }
+
+    return '$jsonKeyContent  final Map<String,$typeName>? ${SwaggerModelsGenerator.generateFieldName(propertyName)};';
   }
 
   String generateGeneralPropertyContent(
@@ -857,6 +972,29 @@ abstract class SwaggerModelsGenerator {
           allEnumsNames,
           allEnumListNames,
           options,
+        );
+      case 'object':
+        return generateDictionaryPropertyContent(
+          propertyName,
+          propertyKey,
+          className,
+          propertyEntryMap,
+          useDefaultNullForLists,
+          allEnumsNames,
+          allEnumListNames,
+          options,
+          basicTypesMap,
+        );
+        return generateListPropertyContent(
+          propertyName,
+          propertyKey,
+          className,
+          propertyEntryMap,
+          useDefaultNullForLists,
+          allEnumsNames,
+          allEnumListNames,
+          options,
+          basicTypesMap,
         );
       default:
         return generateGeneralPropertyContent(
