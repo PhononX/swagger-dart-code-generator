@@ -31,7 +31,7 @@ String normal(String path) {
 }
 
 String _getAdditionalResultPath(GeneratorOptions options) {
-  final filesList = Directory(normalize(options.outputFolder)).listSync();
+  final filesList = Directory(normalize(options.inputFolder)).listSync();
 
   if (filesList.isNotEmpty) {
     return filesList.first.path;
@@ -58,9 +58,8 @@ Map<String, List<String>> _generateExtensions(GeneratorOptions options) {
   additionalResultPath =
       _getAdditionalResultPath(options).replaceAll('\\', '/');
 
-  if (!File(additionalResultPath).existsSync()) {
-    File(additionalResultPath).createSync();
-  }
+  File(additionalResultPath).createSync();
+
   var out = normalize(options.outputFolder);
 
   final allFilesPaths = [
