@@ -952,7 +952,13 @@ abstract class SwaggerModelsGenerator {
       List<String> allEnumListNames,
       GeneratorOptions options,
       Map<String, String> basicTypesMap) {
-    switch (propertyEntryMap['type'] as String) {
+    var type = propertyEntryMap['type'] as String;
+    if (type == 'object' &&
+        propertyEntryMap.containsKey('additionalProperties')) {
+      type = 'dictionary';
+    }
+
+    switch (type) {
       case 'array':
         return generateListPropertyContent(
           propertyName,
@@ -973,7 +979,7 @@ abstract class SwaggerModelsGenerator {
           allEnumListNames,
           options,
         );
-      case 'object':
+      case 'dictionary':
         return generateDictionaryPropertyContent(
           propertyName,
           propertyKey,
@@ -985,17 +991,7 @@ abstract class SwaggerModelsGenerator {
           options,
           basicTypesMap,
         );
-        return generateListPropertyContent(
-          propertyName,
-          propertyKey,
-          className,
-          propertyEntryMap,
-          useDefaultNullForLists,
-          allEnumsNames,
-          allEnumListNames,
-          options,
-          basicTypesMap,
-        );
+
       default:
         return generateGeneralPropertyContent(
           propertyName,
