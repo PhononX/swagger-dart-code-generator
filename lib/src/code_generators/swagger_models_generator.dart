@@ -867,7 +867,7 @@ abstract class SwaggerModelsGenerator {
     String jsonKeyContent;
     if (unknownEnumValue.isEmpty) {
       jsonKeyContent =
-          "@JsonKey(name: '$propertyKey'$includeIfNullString${useDefaultNullForLists ? '' : ', defaultValue: new Map<String,$typeName>()'})\n";
+          "@JsonKey(name: '$propertyKey'$includeIfNullString${useDefaultNullForLists ? '' : ', defaultValue: <String,$typeName>{}'})\n";
     } else {
       jsonKeyContent =
           "@JsonKey(name: '$propertyKey'$includeIfNullString$unknownEnumValue)\n";
