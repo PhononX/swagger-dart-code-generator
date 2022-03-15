@@ -31,7 +31,7 @@ String normal(String path) {
 }
 
 String _getAdditionalResultPath(GeneratorOptions options) {
-  final filesList = Directory(normalize(options.inputFolder)).listSync();
+  final filesList = Directory(normalize(options.outputFolder)).listSync();
 
   if (filesList.isNotEmpty) {
     return filesList.first.path;
