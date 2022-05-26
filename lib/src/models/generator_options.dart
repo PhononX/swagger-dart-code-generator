@@ -25,6 +25,9 @@ class GeneratorOptions {
     this.includePaths = const [],
     this.excludePaths = const [],
     this.inputUrls = const [],
+    this.nullableModels = const [],
+    this.cutFromModelNames = '',
+    this.additionalHeaders = const [],
   });
 
   /// Build options from a JSON map.
@@ -41,7 +44,13 @@ class GeneratorOptions {
   final bool withConverter;
 
   @JsonKey(defaultValue: [])
+  final List<String> additionalHeaders;
+
+  @JsonKey(defaultValue: [])
   List<String> inputUrls;
+
+  @JsonKey(defaultValue: [])
+  List<String> nullableModels;
 
   @JsonKey(defaultValue: false)
   final bool separateModels;
@@ -66,6 +75,9 @@ class GeneratorOptions {
 
   @JsonKey(defaultValue: false)
   final bool useDefaultNullForLists;
+
+  @JsonKey(defaultValue: '')
+  final String cutFromModelNames;
 
   @JsonKey(defaultValue: false)
   final bool buildOnlyModels;

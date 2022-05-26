@@ -1,10 +1,14 @@
 import 'package:swagger_dart_code_generator/src/code_generators/swagger_enums_generator.dart';
+import 'package:swagger_dart_code_generator/src/models/generator_options.dart';
+import 'package:swagger_dart_code_generator/src/swagger_models/swagger_root.dart';
 
 class SwaggerEnumsGeneratorV2 extends SwaggerEnumsGenerator {
-  @override
-  String generate(Map<String, dynamic> map, String fileName) {
-    final definitions = map['definitions'] as Map<String, dynamic>? ?? {};
+  SwaggerEnumsGeneratorV2(GeneratorOptions options) : super(options);
 
-    return generateFromMap(map, fileName, definitions, {}, {});
+  @override
+  String generate(SwaggerRoot root, String fileName) {
+    final definitions = root.definitions;
+
+    return generateFromMap(root, fileName, definitions, {}, {});
   }
 }

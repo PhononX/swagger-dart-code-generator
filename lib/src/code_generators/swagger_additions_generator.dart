@@ -1,8 +1,16 @@
+import 'package:swagger_dart_code_generator/src/code_generators/swagger_generator_base.dart';
 import 'package:swagger_dart_code_generator/src/extensions/file_name_extensions.dart';
 import 'package:swagger_dart_code_generator/src/models/generator_options.dart';
 
 ///Generates index file content, converter and additional methods
-class SwaggerAdditionsGenerator {
+class SwaggerAdditionsGenerator extends SwaggerGeneratorBase {
+  final GeneratorOptions _options;
+
+  @override
+  GeneratorOptions get options => _options;
+
+  SwaggerAdditionsGenerator(this._options);
+
   static const mappingVariableName = 'generatedMapping';
 
   ///Generates index.dart for all generated services
@@ -44,7 +52,6 @@ class SwaggerAdditionsGenerator {
     final chopperImports = buildOnlyModels
         ? ''
         : '''import 'package:chopper/chopper.dart';
-${buildOnlyModels ? '' : 'import \'dart:convert\';'}
 
 import 'client_mapping.dart';
 import 'package:chopper/chopper.dart' as chopper;''';
@@ -62,6 +69,7 @@ import 'package:chopper/chopper.dart' as chopper;''';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:collection/collection.dart';
+import 'dart:convert';
 """);
     }
 
@@ -116,8 +124,7 @@ String? _dateToJson(DateTime? date) {
   }
 
   ///Copy-pasted converter from internet
-  String generateCustomJsonConverter(
-      String fileName, GeneratorOptions options) {
+  String generateCustomJsonConverter(String fileName) {
     if (!options.withConverter) {
       return '';
     }
@@ -130,11 +137,20 @@ class \$CustomJsonDecoder {
   final Map<Type, \$JsonFactory> factories;
 
   dynamic decode<T>(dynamic entity) {
+
     if (entity is Iterable) {
       return _decodeList<T>(entity);
     }
 
     if (entity is T) {
+      return entity;
+    }
+
+    if (isTypeOf<T, Map>()) {
+      return entity;
+    }
+
+     if(isTypeOf<T, Iterable>()) {
       return entity;
     }
 
@@ -175,34 +191,5 @@ class \$JsonSerializableConverter extends chopper.JsonConverter {
 
 final \$jsonDecoder = \$CustomJsonDecoder(generatedMapping);
     ''';
-  }
-
-  static String getChopperClientContent(
-    String className,
-    String host,
-    String basePath,
-    GeneratorOptions options,
-  ) {
-    final baseUrlString = options.withBaseUrl
-        ? "baseUrl:  baseUrl ?? 'http://$host$basePath'"
-        : '/*baseUrl: YOUR_BASE_URL*/';
-
-    final converterString = options.withConverter
-        ? 'converter: \$JsonSerializableConverter(),'
-        : 'converter: chopper.JsonConverter(),';
-
-    final chopperClientBody = '''
-    if(client!=null){
-      return _\$$className(client);
-    }
-
-    final newClient = ChopperClient(
-      services: [_\$$className()],
-      $converterString
-      interceptors: interceptors ?? [],
-      $baseUrlString);
-    return _\$$className(newClient);
-''';
-    return chopperClientBody;
   }
 }

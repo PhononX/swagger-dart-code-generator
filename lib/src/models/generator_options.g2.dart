@@ -52,6 +52,15 @@ GeneratorOptions _$GeneratorOptionsFromJson(Map json) => GeneratorOptions(
               ?.map((e) => e as String)
               .toList() ??
           [],
+      nullableModels: (json['nullable_models'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      cutFromModelNames: json['cut_from_model_names'] as String? ?? '',
+      additionalHeaders: (json['additional_headers'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$GeneratorOptionsToJson(GeneratorOptions instance) =>
@@ -59,7 +68,9 @@ Map<String, dynamic> _$GeneratorOptionsToJson(GeneratorOptions instance) =>
       'use_path_for_request_names': instance.usePathForRequestNames,
       'with_base_url': instance.withBaseUrl,
       'with_converter': instance.withConverter,
+      'additional_headers': instance.additionalHeaders,
       'input_urls': instance.inputUrls,
+      'nullable_models': instance.nullableModels,
       'separate_models': instance.separateModels,
       'use_required_attribute_for_headers':
           instance.useRequiredAttributeForHeaders,
@@ -69,6 +80,7 @@ Map<String, dynamic> _$GeneratorOptionsToJson(GeneratorOptions instance) =>
       'input_folder': instance.inputFolder,
       'output_folder': instance.outputFolder,
       'use_default_null_for_lists': instance.useDefaultNullForLists,
+      'cut_from_model_names': instance.cutFromModelNames,
       'build_only_models': instance.buildOnlyModels,
       'model_postfix': instance.modelPostfix,
       'default_values_map': instance.defaultValuesMap,
