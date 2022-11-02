@@ -761,18 +761,16 @@ static $returnType $fromJsonFunction($valueType? value) => $enumNameCamelCase$fr
     required String className,
     required Map<String, SwaggerSchema> allClasses,
   }) {
-    final items = prop.items;
+    final items = prop;
 
     var typeName = '';
-    if (items != null) {
-      typeName = getValidatedClassName(items.originalRef);
-
+    if (items.additionalProperties?.ref != null) {
       if (typeName.isNotEmpty && !kBasicTypes.contains(typeName.toLowerCase())) {
         typeName += options.modelPostfix;
       }
 
       if (typeName.isEmpty) {
-        final ref = items.ref;
+        final ref = items.additionalProperties!.ref;
         if (ref.isNotEmpty == true) {
           typeName = ref.split('/').last;
 
@@ -1014,7 +1012,7 @@ static $returnType $fromJsonFunction($valueType? value) => $enumNameCamelCase$fr
       type = 'dictionary';
     }
 
-    switch (prop.type) {
+    switch (type) {
       case 'array':
         return generateListPropertyContent(
           propertyName,

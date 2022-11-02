@@ -29,8 +29,7 @@ void main() {
 
       final result = generator.generate(map, fileName);
 
-      expect(
-          result, contains('final enums.TokensResponseTokenType? tokenType'));
+      expect(result, contains('final enums.TokensResponseTokenType? tokenType'));
     });
 
     test('Should generate .toLower() when caseSensitive: false', () {
@@ -41,10 +40,7 @@ void main() {
         enumsCaseSensitive: false,
       )).generate(map, fileName);
 
-      expect(
-          result,
-          contains(
-              'element.value.toLowerCase() == someEnumModel.toLowerCase()'));
+      expect(result, contains('element.value.toLowerCase() == someEnumModel.toLowerCase()'));
     });
 
     test('Should NOT generate .toLower() when caseSensitive: false', () {
@@ -54,14 +50,18 @@ void main() {
       expect(result, contains('element.value == someEnumModel'));
     });
 
+    test('Should generate Map for object', () {
+      final map = SwaggerRoot.parse(modelWithParametersV3);
+      final result = generator.generate(map, fileName);
+
+      expect(result, contains('Map<String,SettingValue>'));
+    });
+
     test('Should parse object name as a field Type', () {
       final map = SwaggerRoot.parse(modelWithParametersV2);
       final result = generator2.generate(map, fileName);
 
-      expect(
-          result,
-          contains(
-              'final enums.ActiveOrderAndListSummaryShoppingType shoppingType'));
+      expect(result, contains('final enums.ActiveOrderAndListSummaryShoppingType shoppingType'));
     });
 
     test('Should parse object name as a field Type', () {
@@ -89,8 +89,7 @@ void main() {
       const defaultValue = 'true';
       const typeName = 'bool';
       const expectedResult = 'true';
-      final result = generator.generateDefaultValueFromMap(
-          DefaultValueMap(defaultValue: defaultValue, typeName: typeName));
+      final result = generator.generateDefaultValueFromMap(DefaultValueMap(defaultValue: defaultValue, typeName: typeName));
 
       expect(result, contains(expectedResult));
     });
@@ -99,8 +98,7 @@ void main() {
       const defaultValue = 'Animal';
       const typeName = 'Object';
       const expectedResult = 'Animal';
-      final result = generator.generateDefaultValueFromMap(
-          DefaultValueMap(defaultValue: defaultValue, typeName: typeName));
+      final result = generator.generateDefaultValueFromMap(DefaultValueMap(defaultValue: defaultValue, typeName: typeName));
 
       expect(result, contains(expectedResult));
     });
@@ -112,8 +110,7 @@ void main() {
       const parameterName = 'orderId';
       final parameter = SwaggerSchema(type: 'object');
       const expectedResult = 'Object';
-      final result = generator.getParameterTypeName(
-          className, parameterName, parameter, '', null);
+      final result = generator.getParameterTypeName(className, parameterName, parameter, '', null);
 
       expect(result, contains(expectedResult));
     });
@@ -123,8 +120,7 @@ void main() {
       const parameterName = 'orderId';
       final parameter = SwaggerSchema(type: 'array');
       const expectedResult = 'Object';
-      final result = generator.getParameterTypeName(
-          className, parameterName, parameter, '', null);
+      final result = generator.getParameterTypeName(className, parameterName, parameter, '', null);
 
       expect(result, contains(expectedResult));
     });
@@ -134,8 +130,7 @@ void main() {
       const parameterName = 'orderId';
       final parameter = SwaggerSchema(oneOf: [SwaggerSchema(type: 'animals')]);
       const expectedResult = 'Object';
-      final result = generator.getParameterTypeName(
-          className, parameterName, parameter, '', null);
+      final result = generator.getParameterTypeName(className, parameterName, parameter, '', null);
 
       expect(result, contains(expectedResult));
     });
@@ -144,8 +139,7 @@ void main() {
       const className = 'Animal';
       const parameterName = 'orderId';
       const expectedResult = 'Object';
-      final result = generator.getParameterTypeName(
-          className, parameterName, null, '', null);
+      final result = generator.getParameterTypeName(className, parameterName, null, '', null);
 
       expect(result, contains(expectedResult));
     });
@@ -155,8 +149,7 @@ void main() {
       const parameterName = 'orderId';
       final parameter = SwaggerSchema(ref: '#/definitions/Pet');
       const expectedResult = 'Pet';
-      final result = generator.getParameterTypeName(
-          className, parameterName, parameter, '', null);
+      final result = generator.getParameterTypeName(className, parameterName, parameter, '', null);
 
       expect(result, contains(expectedResult));
     });
@@ -166,8 +159,7 @@ void main() {
       const parameterName = 'orderId';
       const refNameParameter = 'animals_Object';
       const expectedResult = 'AnimalsObject';
-      final result = generator.getParameterTypeName(
-          className, parameterName, null, '', refNameParameter);
+      final result = generator.getParameterTypeName(className, parameterName, null, '', refNameParameter);
 
       expect(result, contains(expectedResult));
     });
@@ -177,8 +169,7 @@ void main() {
       const parameterName = 'orderId';
       final parameter = SwaggerSchema(type: 'string', format: 'date-time');
       const expectedResult = 'DateTime';
-      final result = generator.getParameterTypeName(
-          className, parameterName, parameter, '', null);
+      final result = generator.getParameterTypeName(className, parameterName, parameter, '', null);
 
       expect(result, contains(expectedResult));
     });
@@ -271,8 +262,7 @@ void main() {
       const propertyKey = 'shipDateGet';
       const className = 'Animals';
       const jsonKeyExpendedResult = "@JsonKey(name: '$propertyKey'";
-      const expectedResult =
-          '\t$jsonKeyExpendedResult)\n\tfinal Pet? $propertyName;';
+      const expectedResult = '\t$jsonKeyExpendedResult)\n\tfinal Pet? $propertyName;';
 
       final result = generator.generatePropertyContentByRef(
         propertyEntryMap,
@@ -313,12 +303,10 @@ void main() {
   });
 
   group('generateEnumPropertyContent', () {
-    test('Should return enum property with JsonKey with fromJson and toJson',
-        () {
+    test('Should return enum property with JsonKey with fromJson and toJson', () {
       const key = 'dog';
       const className = 'animals';
-      const jsonKeyExpectedResult =
-          'toJson: animalsDogToJson, fromJson: animalsDogFromJson';
+      const jsonKeyExpectedResult = 'toJson: animalsDogToJson, fromJson: animalsDogFromJson';
       const expectedResult = 'final AnimalsDog? dog;';
       final result = generator.generateEnumPropertyContent(
         key,
@@ -340,8 +328,7 @@ void main() {
       final map = SwaggerSchema.fromJson({});
       const className = 'Animals';
       const classExpectedResult = 'class Animals{';
-      const factoryConstructorExpectedResult =
-          '\tfactory Animals.fromJson(Map<String, dynamic> json) => _\$AnimalsFromJson(json);\n';
+      const factoryConstructorExpectedResult = '\tfactory Animals.fromJson(Map<String, dynamic> json) => _\$AnimalsFromJson(json);\n';
       final result = generator.generateModelClassContent(
         SwaggerRoot.empty,
         className,
@@ -362,8 +349,7 @@ void main() {
       final map = SwaggerSchema.fromJson({});
       const className = 'Animals';
       const classExpectedResult = 'class Animals{';
-      const factoryConstructorExpectedResult =
-          '\tfactory Animals.fromJson(Map<String, dynamic> json) => _\$AnimalsFromJson(json);\n';
+      const factoryConstructorExpectedResult = '\tfactory Animals.fromJson(Map<String, dynamic> json) => _\$AnimalsFromJson(json);\n';
       final result = generator2.generateModelClassContent(
         SwaggerRoot.empty,
         className,
@@ -568,8 +554,7 @@ void main() {
       const propertyName = 'dog';
       const className = 'Animals';
       const propertyKey = 'Dog';
-      const jsonKeyExpectedResult =
-          "@JsonKey(name: 'Dog', defaultValue: <Object>[])";
+      const jsonKeyExpectedResult = "@JsonKey(name: 'Dog', defaultValue: <Object>[])";
 
       const propertyExpectedResult = 'final List<Object>? dog';
       final result = generator.generateListPropertyContent(
@@ -607,13 +592,11 @@ void main() {
         {},
       );
 
-      expect(
-          result, contains('toJson: dogListToJson, fromJson: dogListFromJson'));
+      expect(result, contains('toJson: dogListToJson, fromJson: dogListFromJson'));
     });
 
     test('Should return List<Object>', () {
-      final map =
-          SwaggerSchema(items: SwaggerSchema(originalRef: 'TestOriginalRef'));
+      final map = SwaggerSchema(items: SwaggerSchema(originalRef: 'TestOriginalRef'));
       const propertyName = 'dog';
       const className = 'Animals';
       const propertyKey = 'Dog';
@@ -635,8 +618,7 @@ void main() {
     });
 
     test('Should return List<Object> by ref', () {
-      final map =
-          SwaggerSchema(items: SwaggerSchema(ref: '#/definitions/TestObject'));
+      final map = SwaggerSchema(items: SwaggerSchema(ref: '#/definitions/TestObject'));
       const propertyName = 'dog';
       const className = 'Animals';
       const propertyKey = 'Dog';
@@ -678,8 +660,7 @@ void main() {
         {},
       );
 
-      expect(result,
-          contains('toJson: animalsDogToJson, fromJson: animalsDogFromJson'));
+      expect(result, contains('toJson: animalsDogToJson, fromJson: animalsDogFromJson'));
     });
 
     test('Should return property content by schema', () {
@@ -831,8 +812,7 @@ void main() {
       );
     });
 
-    test('Should get enums with integer return types in response properties',
-        () {
+    test('Should get enums with integer return types in response properties', () {
       final map = SwaggerRoot.parse(schemasWithIntegers);
       final result = generator.getAllEnums(map);
 
