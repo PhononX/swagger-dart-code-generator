@@ -536,11 +536,10 @@ const String schemasWithEnumsInProperties = '''
             "description": "Flag indicating showPage availability"
           },
           "successValues": {
-            "items": {
-              "enum": [
-                "one, two"
-              ]
-            }
+            "enum": [
+              "one",
+              "two"
+            ]
           }
         }
       }
@@ -566,12 +565,180 @@ const String schemasWithEnumsInProperties = '''
             "schema": {
               "properties": {
                 "failedValued": {
+                  "enum": [
+                    "one",
+                    "two"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+''';
+
+const String schemasWithIntegers = '''
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Some service",
+    "version": "1.0"
+  },
+  "components": {
+    "schemas": {
+      "AccountType": {
+        "title": "AccountType",
+        "enum": [
+          0,
+          1,
+          2,
+          6
+        ],
+        "type": "integer",
+        "description": "An enumeration."
+      },
+      "SpaSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Some description"
+          },
+          "showPageAvailable": {
+            "type": "boolean",
+            "description": "Flag indicating showPage availability"
+          },
+          "successValues": {
+            "enum": [
+              1, 2
+            ],
+            "type": "integer",
+            "default": 1
+          }
+        }
+      }
+    },
+    "responses": {
+      "SpaResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "enum": [
+                1, 1
+              ],
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "SpaEnumResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "failedValued": {
+                  "enum": [
+                    1, 2
+                  ],
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+''';
+
+const String schemasWithEnumsFromAllOf = '''
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Some service",
+    "version": "1.0"
+  },
+  "components": {
+    "schemas": {
+      "Success": {
+        "title": "Success",
+        "enum": [
+          "one",
+          "two"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      }
+    },
+    "responses": {
+      "SpaEnumResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "success": {
+                  "allOf": [
+                    {
+                      "\$ref": "#/components/schemas/Success"
+                    }
+                  ],
+                  "default": "one"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+''';
+
+const String schemasWithEnumsArrayRef = '''
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Some service",
+    "version": "1.0"
+  },
+  "components": {
+    "schemas": {
+      "Success": {
+        "title": "Success",
+        "enum": [
+          "one",
+          "two"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      }
+    },
+    "responses": {
+      "SpaEnumResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "success": {
                   "items": {
-                    "enum": [
-                      "one",
-                      "two"
-                    ]
-                  }
+                    "\$ref": "#/components/schemas/Success"
+                  },
+                  "type": "array"
+                },
+                "successOther": {
+                  "items": {
+                    "\$ref": "#/components/schemas/Success"
+                  },
+                  "type": "array",
+                  "default": ["one", "two"]
                 }
               }
             }
@@ -659,6 +826,28 @@ const requestWithEnum = '''
             }
           }
         }
+      }
+    }
+  }
+}
+''';
+
+const objectWithadditionalProperties = '''
+{
+  "components" : {
+    "schemas" : {
+      "FooDto": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

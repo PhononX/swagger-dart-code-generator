@@ -10,7 +10,7 @@ class GeneratorOptions {
     this.withConverter = true,
     this.ignoreHeaders = false,
     this.separateModels = false,
-    this.useDefaultNullForLists = false,
+    this.classesWithNullabeLists = const [],
     this.buildOnlyModels = false,
     this.defaultValuesMap = const <DefaultValueMap>[],
     this.defaultHeaderValuesMap = const <DefaultHeaderValueMap>[],
@@ -25,6 +25,12 @@ class GeneratorOptions {
     this.includePaths = const [],
     this.excludePaths = const [],
     this.inputUrls = const [],
+    this.nullableModels = const [],
+    this.cutFromModelNames = '',
+    this.additionalHeaders = const [],
+    this.overrideEqualsAndHashcode = true,
+    this.overrideToString = true,
+    this.pageWidth,
   });
 
   /// Build options from a JSON map.
@@ -37,11 +43,26 @@ class GeneratorOptions {
   @JsonKey(defaultValue: true)
   final bool withBaseUrl;
 
+  @JsonKey(defaultValue: null)
+  final int? pageWidth;
+
+  @JsonKey(defaultValue: true)
+  final bool overrideToString;
+
+  @JsonKey(defaultValue: true)
+  final bool overrideEqualsAndHashcode;
+
   @JsonKey(defaultValue: true)
   final bool withConverter;
 
   @JsonKey(defaultValue: [])
+  final List<String> additionalHeaders;
+
+  @JsonKey(defaultValue: [])
   List<String> inputUrls;
+
+  @JsonKey(defaultValue: [])
+  List<String> nullableModels;
 
   @JsonKey(defaultValue: false)
   final bool separateModels;
@@ -64,8 +85,11 @@ class GeneratorOptions {
   @JsonKey(defaultValue: '')
   final String outputFolder;
 
-  @JsonKey(defaultValue: false)
-  final bool useDefaultNullForLists;
+  @JsonKey(defaultValue: [])
+  final List<String> classesWithNullabeLists;
+
+  @JsonKey(defaultValue: '')
+  final String cutFromModelNames;
 
   @JsonKey(defaultValue: false)
   final bool buildOnlyModels;

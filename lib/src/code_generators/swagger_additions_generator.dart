@@ -1,8 +1,16 @@
+import 'package:swagger_dart_code_generator/src/code_generators/swagger_generator_base.dart';
 import 'package:swagger_dart_code_generator/src/extensions/file_name_extensions.dart';
 import 'package:swagger_dart_code_generator/src/models/generator_options.dart';
 
 ///Generates index file content, converter and additional methods
-class SwaggerAdditionsGenerator {
+class SwaggerAdditionsGenerator extends SwaggerGeneratorBase {
+  final GeneratorOptions _options;
+
+  @override
+  GeneratorOptions get options => _options;
+
+  SwaggerAdditionsGenerator(this._options);
+
   static const mappingVariableName = 'generatedMapping';
 
   ///Generates index.dart for all generated services
@@ -44,9 +52,9 @@ class SwaggerAdditionsGenerator {
     final chopperImports = buildOnlyModels
         ? ''
         : '''import 'package:chopper/chopper.dart';
-${buildOnlyModels ? '' : 'import \'dart:convert\';'}
 
 import 'client_mapping.dart';
+import 'dart:async';
 import 'package:chopper/chopper.dart' as chopper;''';
 
     final enumsImport = hasEnums
@@ -62,6 +70,7 @@ import 'package:chopper/chopper.dart' as chopper;''';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:collection/collection.dart';
+${options.overrideToString ? "import 'dart:convert';" : ''}
 """);
     }
 
@@ -112,12 +121,16 @@ String? _dateToJson(DateTime? date) {
 
   return '\$year-\$month-\$day';
   }
+
+  class Wrapped<T> {
+  final T value;
+  const Wrapped.value(this.value);
+}
 ''';
   }
 
   ///Copy-pasted converter from internet
-  String generateCustomJsonConverter(
-      String fileName, GeneratorOptions options) {
+  String generateCustomJsonConverter(String fileName) {
     if (!options.withConverter) {
       return '';
     }
@@ -130,11 +143,20 @@ class \$CustomJsonDecoder {
   final Map<Type, \$JsonFactory> factories;
 
   dynamic decode<T>(dynamic entity) {
+
     if (entity is Iterable) {
       return _decodeList<T>(entity);
     }
 
     if (entity is T) {
+      return entity;
+    }
+
+    if (isTypeOf<T, Map>()) {
+      return entity;
+    }
+
+     if(isTypeOf<T, Iterable>()) {
       return entity;
     }
 
@@ -160,14 +182,14 @@ class \$CustomJsonDecoder {
 
 class \$JsonSerializableConverter extends chopper.JsonConverter {
   @override
-  chopper.Response<ResultType> convertResponse<ResultType, Item>(chopper.Response response) {
+  FutureOr<chopper.Response<ResultType>> convertResponse<ResultType, Item>(chopper.Response response) async {
     if (response.bodyString.isEmpty) {
       // In rare cases, when let's say 204 (no content) is returned -
       // we cannot decode the missing json with the result type specified
       return chopper.Response(response.base, null, error: response.error);
     }
 
-    final jsonRes = super.convertResponse(response);
+    final jsonRes = await super.convertResponse(response);
     return jsonRes.copyWith<ResultType>(
         body: \$jsonDecoder.decode<Item>(jsonRes.body) as ResultType);
   }
@@ -175,34 +197,5 @@ class \$JsonSerializableConverter extends chopper.JsonConverter {
 
 final \$jsonDecoder = \$CustomJsonDecoder(generatedMapping);
     ''';
-  }
-
-  static String getChopperClientContent(
-    String className,
-    String host,
-    String basePath,
-    GeneratorOptions options,
-  ) {
-    final baseUrlString = options.withBaseUrl
-        ? "baseUrl:  baseUrl ?? 'http://$host$basePath'"
-        : '/*baseUrl: YOUR_BASE_URL*/';
-
-    final converterString = options.withConverter
-        ? 'converter: \$JsonSerializableConverter(),'
-        : 'converter: chopper.JsonConverter(),';
-
-    final chopperClientBody = '''
-    if(client!=null){
-      return _\$$className(client);
-    }
-
-    final newClient = ChopperClient(
-      services: [_\$$className()],
-      $converterString
-      interceptors: interceptors ?? [],
-      $baseUrlString);
-    return _\$$className(newClient);
-''';
-    return chopperClientBody;
   }
 }

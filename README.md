@@ -2,15 +2,12 @@
 <img src="https://raw.githubusercontent.com/epam-cross-platform-lab/swagger-dart-code-generator/master/assets/lib_full_logo.png" height="100" alt="Swagger dart code generator" />
 </p>
 
-Code partially generated with [chopper](https://pub.dev/packages/chopper)
-
 # :mega: **Build dart types from Swagger/OpenAPI schemas**
 
 [![pub package](https://img.shields.io/pub/v/swagger_dart_code_generator.svg)](https://pub.dartlang.org/packages/swagger_dart_code_generator)
 ![GitHub issues](https://img.shields.io/github/issues-raw/epam-cross-platform-lab/swagger-dart-code-generator?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/epam-cross-platform-lab/swagger-dart-code-generator?style=flat-square)
 <a href="https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/actions"><img src="https://img.shields.io/github/workflow/status/epam-cross-platform-lab/swagger-dart-code-generator/CI%20for%20master%20branch/master" alt="build"></a>
-<a href="https://discord.gg/Z6btby6b"><img src="https://img.shields.io/discord/755005482405462017.svg?logo=discord&color=blue" alt="Discord"></a>
 [![codecov](https://codecov.io/gh/epam-cross-platform-lab/swagger-dart-code-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/epam-cross-platform-lab/swagger-dart-code-generator)
 <a href="https://github.com/epam-cross-platform-lab/swagger-dart-code-generator"><img src="https://img.shields.io/github/stars/epam-cross-platform-lab/swagger-dart-code-generator?style=social" alt="Discord"></a>
 
@@ -32,16 +29,16 @@ The generated code uses the following packages in run-time:
 ```yaml
 dependencies:
   chopper: ^4.0.1
-  json_annotation: ^4.1.0
+  json_annotation: ^4.4.0
 ```
 
 Add the following to your `pubspec.yaml` file to be able to do code generation:
 ```yaml
 dev_dependencies:
-  build_runner: ^2.1.4
-  chopper_generator: ^4.0.2
-  json_serializable: ^5.0.0
-  swagger_dart_code_generator: any
+  build_runner: ^2.1.7
+  chopper_generator: ^4.0.5
+  json_serializable: ^6.1.4
+  swagger_dart_code_generator: ^2.4.6
 ```
 
 Then run:
@@ -76,21 +73,27 @@ targets:
 
 | Option |Default value | Is required | Description |
 | - | - | - | - |
+| **`input_folder`** | **`-`** | **`true`** | **Path to folder with .swagger files (for ex. swagger_examples, or lib/swaggers).** |
+| **`output_folder`** | **`-`** | **`true`** | **Path to output folder (for ex. lib/generated).** |
+| `input_urls` | `[]` | `false` | Here you can mention list of files to be downloaded from the internet. You can check [example](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/blob/master/example/build.yaml) of usage. |
 | `with_base_url` | `true` | `false` | If this option is false, generator will ignore base url in swagger file. |
 | `use_required_attribute_for_headers` | `true` | `false` | If this option is false, generator will not add @required attribute to headers. |
 | `with_converter` | `true` | `false` | If option is true, combination of all mappings will be generated. |
 | `ignore_headers` | `false` | `false` | If option is true, headers will not be generated. |
+| `additional_headers` | `false` | `false` | List of additional headers, not specified in Swagger. Example of usage: [build.yaml](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/blob/master/example/build.yaml)
 | `enums_case_sensitive` | `true` | `false` | If value is false, 'enumValue' will be defined like Enum.enumValue even it's json key equals 'ENUMVALUE' |
 | `include_paths` | `[]` | `false` | List<String> of Regex If not empty - includes only paths matching reges |
 | `exclude_paths` | `[]` | `false` | List<String> of Regex If not empty -exclude paths matching reges |
-| `use_default_null_for_lists` | `false` | `false` | If option is true, default value for lists will be null, otherwise - [] |
+| `classes_with_nullabe_lists` | [] | `false` | List of regex strings. If class name matches any of regex - list properties will have default value `null`. Otherwise it will be empty list. If you used `use_default_null_for_lists: true`, just set `.*` value for this property and result will be same.  Check [example](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/blob/master/example/build.yaml) for more details |
 | `build_only_models` | `false` | `false` | If option is true, chopper classes will not be generated. |
 | `separate_models` | `false` | `false` | If option true, generates models into separate file. |
 | `include_if_null` | `null` | `false` | Sets includeIfNull JsonAnnotation feature and sets value for it. If null - not set anything. |
 | `default_values_map` | `[]` | `false` | Contains map of types and theirs default values. See [DefaultValueMap](#default-value-map-for-model-generation). |
 | `response_override_value_map` | `[]` | `false` | Contains map of responses and theirs overridden values. See [ResponseOverrideValueMap](#response-override-value-map-for-requests-generation). |
-| `input_folder` | `-` | `true` | Path to folder with .swagger files (for ex. swagger_examples, or lib/swaggers). |
-| `output_folder` | `-` | `true` | Path to output folder (for ex. lib/generated). |
+| `cut_from_model_names` | `-` | `false` | If your model names are long and contain a lot of duplicated words, for example `DbUsersModelsV3GeneralUserModel`, you can cut off duplicated part, using `cut_from_model_names : DbUsersModelsV3`. Also, you can use regex expressions in this parameter. |
+| `nullable_models` | `-` | `false` | List of model names should have force-nullable properties. Example of usage in [build.yaml](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/blob/master/example/build.yaml) |
+| `override_equals_and_hashcode` | `-` | `true` | If need to decrease app size - you can disable generation of `hashcode` and `Equals` method |
+
 
 It's important to remember that, by default, [build](https://github.com/dart-lang/build) will follow [Dart's package layout conventions](https://dart.dev/tools/pub/package-layout), meaning that only some folders will be considered to parse the input files. So, if you want to reference files from a folder other than `lib/`, make sure you've included it on `sources`:
 

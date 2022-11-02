@@ -61,6 +61,8 @@ class RequestBody {
   @JsonKey(name: '\$ref', defaultValue: '')
   String ref;
 
+  bool get hasRef => ref.isNotEmpty;
+
   RequestBody({
     this.content,
     this.ref = '',
@@ -77,6 +79,15 @@ RequestContent? _contentFromJson(Map<String, dynamic>? map) {
     return null;
   }
 
+  if (map.containsKey('multipart/form-data') &&
+      !map.containsKey('application/json') &&
+      !map.containsKey('application/x-www-form-urlencoded')) {
+    final multipart =
+        map['multipart/form-data']['schema'] as Map<String, dynamic>;
+    return RequestContent(
+        isMultipart: true, schema: SwaggerSchema.fromJson(multipart));
+  }
+
   final content = map.values.first as Map<String, dynamic>;
 
   return RequestContent.fromJson(content);
@@ -85,11 +96,14 @@ RequestContent? _contentFromJson(Map<String, dynamic>? map) {
 @JsonSerializable()
 class RequestContent {
   RequestContent({
+    this.isMultipart,
     this.schema,
   });
 
   @JsonKey(name: 'schema')
   final SwaggerSchema? schema;
+
+  final bool? isMultipart;
 
   Map<String, dynamic> toJson() => _$RequestContentToJson(this);
 

@@ -8,6 +8,7 @@ const List<String> kKeyClasses = [
   'Request',
   'Type',
   'Query',
+  'Body',
 ];
 
 const kBasicTypes = [
@@ -24,8 +25,14 @@ const kBasicTypes = [
   kMap,
 ];
 
+const kBasicSwaggerTypes = [
+  ...kBasicTypes,
+  'number',
+];
+
 const kMap = 'Map';
 const kMapStringDynamic = 'Map<String,dynamic>';
+const kRequired = 'required';
 
 const kChopperService = 'ChopperService';
 const kChopperApi = 'ChopperApi';
@@ -46,6 +53,7 @@ const kResponses = '/responses/';
 const kPath = 'path';
 const kOptionalBody = 'optionalBody';
 const kFormData = 'formData';
+const kMultipart = 'multipart';
 
 const kDefaultBodyParameter = 'Object';
 const kField = 'Field';
@@ -75,6 +83,8 @@ const kCookie = 'cookie';
 const kArray = 'array';
 const kEnum = 'enum';
 const kBody = 'body';
+const kPartFile = 'partFile';
+const kPart = 'part';
 
 const kDynamic = 'dynamic';
 
@@ -82,6 +92,7 @@ const supportedRequestTypes = ['get', 'post', 'put', 'delete', 'head', 'patch'];
 
 const kEnumNames = 'x-enumNames';
 const kEnumVarnames = 'x-enum-varnames';
+const kIsNullable = 'x-nullable';
 
 const kServiceHeader = '''
 // **************************************************************************

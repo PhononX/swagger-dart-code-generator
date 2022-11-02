@@ -22,12 +22,23 @@ targets:
           with_converter: true
           use_path_for_request_names: true
           use_default_null_for_lists: false
+          override_equals_and_hashcode: true
           build_only_models: false
+          additional_headers:
+            - "Cache-Control"
           separate_models: false
           enums_case_sensitive: false
+          cut_from_model_names: "ModelRenameV3"
+          nullable_models:
+            - "Pet"
+            - "Dog"
           ignore_headers: false
           use_required_attribute_for_headers: false
           include_if_null: false
+          classes_with_nullabe_lists:
+            - "Pet"
+            - "Dog"
+            - "Cat"
           exclude_paths:
             - "/items/{id}"
           response_override_value_map:

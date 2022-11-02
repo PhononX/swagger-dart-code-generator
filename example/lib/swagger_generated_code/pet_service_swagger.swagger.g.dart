@@ -111,13 +111,11 @@ Pet _$PetFromJson(Map<String, dynamic> json) => Pet(
           : Category.fromJson(json['category'] as Map<String, dynamic>),
       name: json['name'] as String? ?? '',
       photoUrls: (json['photoUrls'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+          ?.map((e) => e as String)
+          .toList(),
       tags: (json['tags'] as List<dynamic>?)
-              ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
+          ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+          .toList(),
       status: petStatusFromJson(json['status']),
     );
 

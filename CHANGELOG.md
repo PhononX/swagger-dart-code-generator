@@ -1,3 +1,128 @@
+# 2.8.3
+
+* Fixed issue with duplicated enums ([#469](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/469))
+
+# 2.8.1
+
+* Fixed generation of some enums and classes ([#458](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/458))
+# 2.8.0
+
+* Added Chopper 5.+ Support ([#464](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/464))
+
+# 2.7.9
+
+* Fixed generation of List of enums using nullableLists properties
+
+# 2.7.8
+
+* Added option not to override `toString()` method
+
+# 2.7.7+1
+
+* Returned generation of @JsonValue for enums
+
+# 2.7.6
+
+* Fixed copyWith method generation ([#438](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/438))
+* Fixed generation of names with dots and other bad things ([#449](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/449))
+
+# 2.7.5
+
+* Added new build options flag `override_equals_and_hashcode` to disable generation of hashCode and equals if need to decrease codebase
+
+# 2.7.3
+
+* Fixed issue with generation `+` and `-` signs as enum names ([#444](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/444))
+
+# 2.7.2
+
+* Implemented generation of copyWithWrapped ([#438](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/438))
+
+# 2.7.1
+
+* Fixed generation of putIfAbsent for responses ([#436](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/436))
+
+# 2.7.0
+
+* Fixed and optimizations
+* Improved multipart support ([#440](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/440))
+
+# 2.6.0
+
+* ***Breaking*** Removed  `use_default_null_for_lists` option
+* Added new option: `classes_with_nullabe_lists` option to have avility to customise nullable lists on separate class. Use `.*` regex
+
+# 2.5.8
+
+* Fixed generation of `path` parameters ([#415](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/415))
+* Implemented generation of `FormData` ([#385](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/385))
+
+# 2.5.7
+
+* Fixed some issues in swagger examples
+
+# 2.5.6
+
+* Fixed generation of basic types in responses by ref
+
+# 2.5.5
+
+* Fixed cases when enums has integer values in models
+* Fixed cases with enums in request bodies
+
+# 2.5.4
+
+* Fixed generation of models with allOf ([#410](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/410))
+
+# 2.5.3
+
+* Bugfixing
+
+# 2.5.2
+
+* Added new build option `additionalHeaders`. It allows to add some headers for ALL service requests
+
+# 2.5.1
+
+* Changed generation of dynamics enums to string enums in requests
+
+# 2.5.0+2
+
+* Code format
+
+# 2.5.0+1
+
+* Fixed generation of lists of objects in schemas ([#398](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/398))
+* Duplicated issue ([#397](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/397))
+* Global refactoring of Models generator
+
+# 2.4.10
+
+* Fixed generation of requrst properties annotations ([#384](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/384))
+* Various fixes and improvements
+* Refactored generator caching flow
+
+# 2.4.9
+
+* Added generation of `allOff` models to not class, but to have ability to map it to any type
+
+```dart
+typedef ClassName = Map<String, dynamic>
+```
+
+# 2.4.8
+
+* Added import `dart:convert`; when generate only models ([#372](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/372))
+# 2.4.7
+
+* Made required properties in models not nullable ([#324](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/324))
+* Added `nullableModels` build option to made exeptions
+
+# 2.4.6
+
+* Added authentication to `create` method ([#360](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/360))
+* Added ability to refactor model names ([#361](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/361))
+
 # 2.4.5
 
 * Fixed generation on Windows ([#354](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/354))
