@@ -90,9 +90,13 @@ class SwaggerSchema {
 
   List<String>? enumNames;
 
-  factory SwaggerSchema.fromJson(Map<String, dynamic> json) => _$SwaggerSchemaFromJson(json)
-    ..enumNames = ((json[kEnumNames] ?? json[kEnumVarnames]) as List?)?.map((e) => e as String).toList()
-    ..isNullable = (json[kIsNullable] ?? json[kIsNullable] ?? false) as bool;
+  factory SwaggerSchema.fromJson(Map<String, dynamic> json) =>
+      _$SwaggerSchemaFromJson(json)
+        ..enumNames = ((json[kEnumNames] ?? json[kEnumVarnames]) as List?)
+            ?.map((e) => e as String)
+            .toList()
+        ..isNullable =
+            (json[kIsNullable] ?? json[kIsNullable] ?? json[kNullable] ?? false) as bool;
 
   Map<String, dynamic> toJson() => {
         ..._$SwaggerSchemaToJson(this),

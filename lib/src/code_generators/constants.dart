@@ -9,6 +9,7 @@ const List<String> kKeyClasses = [
   'Type',
   'Query',
   'Body',
+  'Method',
 ];
 
 const kBasicTypes = [
@@ -93,6 +94,7 @@ const supportedRequestTypes = ['get', 'post', 'put', 'delete', 'head', 'patch'];
 const kEnumNames = 'x-enumNames';
 const kEnumVarnames = 'x-enum-varnames';
 const kIsNullable = 'x-nullable';
+const kNullable = 'nullable';
 
 const kServiceHeader = '''
 // **************************************************************************

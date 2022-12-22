@@ -49,6 +49,10 @@ class SwaggerAdditionsGenerator extends SwaggerGeneratorBase {
     final chopperPartImport =
         buildOnlyModels ? '' : "part '$swaggerFileName.swagger.chopper.dart';";
 
+    final overridenModels = options.overridenModels.isEmpty
+        ? ''
+        : 'import \'overriden_models.dart\';';
+
     final chopperImports = buildOnlyModels
         ? ''
         : '''import 'package:chopper/chopper.dart';
@@ -77,6 +81,8 @@ ${options.overrideToString ? "import 'dart:convert';" : ''}
     if (hasModels && separateModels) {
       result.write("import '$swaggerFileName.models.swagger.dart';");
     }
+
+    result.write(overridenModels);
 
     if (chopperImports.isNotEmpty) {
       result.write(chopperImports);

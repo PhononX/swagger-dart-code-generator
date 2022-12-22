@@ -1,3 +1,45 @@
+# 2.9.0
+
+* Fixed generation of nullable model properties ([#522](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/522))
+
+# 2.9.0
+
+* Fixed generation of @OptionalBody annotations ([#509](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/509))
+* Fixed generation of nullable model properties ([#506](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/506))
+* ***Breaking*** Changed String path to Uri in Chopper lib ([#515](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/515))
+
+# 2.8.9
+
+* Fixed generation of request bodies and defined lists types
+
+# 2.8.8
+
+* Fixed generation of some List models
+
+# 2.8.7
+
+* Fixed generation `allOf` properties with just properties ([#507](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/507))
+
+* Fixed generation of basic types refs and lists of them ([#502](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/502))
+
+# 2.8.6
+
+* Make Object in List of Object nullable ([#498](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/498))
+
+* Fixed generation of request bodies in some cases ([#489](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/489))
+
+* Added `Method` to key classes ([#492](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/492))
+
+* Fixed generation of list request bodies ([#493](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/493))
+
+# 2.8.5
+
+* Fixed generation of request bodies with refs ([#484](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/484))
+
+# 2.8.4
+
+* Fixed issue with duplicated enums ([#470](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/470))
+
 # 2.8.3
 
 * Fixed issue with duplicated enums ([#469](https://github.com/epam-cross-platform-lab/swagger-dart-code-generator/issues/469))
