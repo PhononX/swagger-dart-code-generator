@@ -5,6 +5,12 @@ const String modelWithParametersV3 = '''
     "schemas": {
       "ModelWithDictionary": {
         "properties": {
+          "reaction_counts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
           "settings": {
             "additionalProperties": {
               "$ref": "#/components/schemas/SettingValue"
@@ -846,8 +852,7 @@ const objectWithadditionalProperties = '''
             },
             "nullable": true
           }
-        },
-        "additionalProperties": false
+        }
       }
     }
   }

@@ -649,9 +649,7 @@ static $returnType $fromJsonFunction($valueType? value) => $enumNameCamelCase$fr
       typeName = typeName.makeNullable();
     }
 
-    if (options.classesWithNullabeLists.contains(className) &&
-        typeName.startsWith('List<') &&
-        !typeName.endsWith('?')) {
+    if (options.classesWithNullabeLists.contains(className) && typeName.startsWith('List<') && !typeName.endsWith('?')) {
       typeName += '?';
     }
 
@@ -832,7 +830,7 @@ static $returnType $fromJsonFunction($valueType? value) => $enumNameCamelCase$fr
       typeName = getParameterTypeName(
         className,
         propertyName,
-        items,
+        items.additionalProperties ?? items,
         options.modelPostfix,
         null,
       );
@@ -1105,7 +1103,7 @@ static $returnType $fromJsonFunction($valueType? value) => $enumNameCamelCase$fr
     if (propertiesMap.isEmpty) {
       return '';
     }
-    
+
     final results = <String>[];
     final propertyNames = <String>[];
 

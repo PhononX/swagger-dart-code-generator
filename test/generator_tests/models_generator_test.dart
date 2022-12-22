@@ -57,6 +57,13 @@ void main() {
       expect(result, contains('Map<String,SettingValue>'));
     });
 
+    test('Should generate Map for object with type number', () {
+      final map = SwaggerRoot.parse(modelWithParametersV3);
+      final result = generator.generate(map, fileName);
+
+      expect(result, contains('Map<String,double>'));
+    });
+
     test('Should parse object name as a field Type', () {
       final map = SwaggerRoot.parse(modelWithParametersV2);
       final result = generator2.generate(map, fileName);
@@ -903,7 +910,7 @@ void main() {
       final map = SwaggerRoot.parse(objectWithadditionalProperties);
       final result = generator.generate(map, 'test');
 
-      expect(result, contains('final Map<String,dynamic>? metadata'));
+      expect(result, contains('final Map<String,String>? metadata'));
     });
   });
 }
