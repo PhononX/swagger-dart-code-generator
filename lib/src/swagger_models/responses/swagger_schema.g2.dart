@@ -26,10 +26,12 @@ SwaggerSchema _$SwaggerSchemaFromJson(Map<String, dynamic> json) => SwaggerSchem
       description: json['description'] as String? ?? '',
       enumNames: (json['enumNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
       isNullable: json['nullable'] as bool? ?? false,
-      additionalProperties:
-          json['additionalProperties'] == null ? null : SwaggerSchema.fromJson(json['additionalProperties'] as Map<String, dynamic>),
-      discriminator:
-          json['discriminator'] is Map<String, dynamic> ? Discriminator.fromJson(json['discriminator'] as Map<String, dynamic>) : null,
+      hasAdditionalProperties: json['additionalProperties'] == null
+          ? false
+          : _additionalsFromJson(json['additionalProperties']),
+      msEnum: json['x-ms-enum'] == null
+          ? null
+          : MsEnum.fromJson(json['x-ms-enum'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SwaggerSchemaToJson(SwaggerSchema instance) => <String, dynamic>{
@@ -40,10 +42,10 @@ Map<String, dynamic> _$SwaggerSchemaToJson(SwaggerSchema instance) => <String, d
       r'$ref': instance.ref,
       'description': instance.description,
       'enum': instance.enumValuesObj,
+      'x-ms-enum': instance.msEnum,
       'required': instance.required,
       'items': instance.items,
       'properties': instance.properties,
-      'discriminator': instance.discriminator,
       'nullable': instance.isNullable,
       'schema': instance.schema,
       'oneOf': instance.oneOf,
@@ -53,15 +55,22 @@ Map<String, dynamic> _$SwaggerSchemaToJson(SwaggerSchema instance) => <String, d
       'enumNames': instance.enumNames,
     };
 
-Discriminator _$DiscriminatorFromJson(Map<String, dynamic> json) => Discriminator(
-      propertyName: json['propertyName'] as String? ?? '',
-      mapping: (json['mapping'] as Map<String, dynamic>?)?.map(
-            (k, e) => MapEntry(k, e as String),
-          ) ??
-          {},
+MsEnum _$MsEnumFromJson(Map<String, dynamic> json) => MsEnum(
+      values: (json['values'] as List<dynamic>?)
+              ?.map((e) => MsEnumValue.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
-Map<String, dynamic> _$DiscriminatorToJson(Discriminator instance) => <String, dynamic>{
-      'propertyName': instance.propertyName,
-      'mapping': instance.mapping,
+Map<String, dynamic> _$MsEnumToJson(MsEnum instance) => <String, dynamic>{
+      'values': instance.values,
+    };
+
+MsEnumValue _$MsEnumValueFromJson(Map<String, dynamic> json) => MsEnumValue(
+      value: json['value'] ?? const [],
+    );
+
+Map<String, dynamic> _$MsEnumValueToJson(MsEnumValue instance) =>
+    <String, dynamic>{
+      'value': instance.value,
     };

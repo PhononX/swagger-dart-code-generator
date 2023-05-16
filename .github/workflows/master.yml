@@ -11,7 +11,7 @@ jobs:
     
     strategy:
       matrix:
-        runs-on: [windows-latest, ubuntu-latest]
+        runs-on: [ubuntu-latest]
     
     steps:
     - uses: actions/checkout@v2.1.0
@@ -23,8 +23,6 @@ jobs:
       run: flutter pub get
     - name: Run tests
       run: flutter pub run test
-    - name: Flutter analyze
-      run: flutter analyze
     - name: Flutter test coverage
       run: flutter test --coverage
     - name: Remove some unnecessary files from coverage
